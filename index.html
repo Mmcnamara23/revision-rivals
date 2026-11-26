@@ -187,7 +187,7 @@ function buildTopicPool(rows){
   q=>"Pick the best answer: "+q,
   q=>"Revision question: "+q
  ];
- return rows.flatMap((r,i)=>variants.map((make,j)=>({q:make(r[0]),a:[r[1],...r[2]],c:0,e:r[3],key:i+"-"+j})));
+ return rows.flatMap((r,i)=>variants.map((make,j)=>{const choices=[{v:r[1],ok:true},...r[2].map(v=>({v,ok:false}))].sort(()=>Math.random()-.5);return {q:make(r[0]),a:choices.map(x=>x.v),c:choices.findIndex(x=>x.ok),e:r[3],key:i+"-"+j}}));
 }
 const TOPIC_BANK=Object.fromEntries(Object.entries(CHEM_TOPICS).map(([name,rows])=>[name,buildTopicPool(rows)]));
 
@@ -196,7 +196,7 @@ let coins=Number(localStorage.getItem("rr-coins")||0), currentSubject="", questi
 const $=id=>document.getElementById(id);
 function updateCoins(){$("coinCount").textContent=coins;localStorage.setItem("rr-coins",String(coins))}
 function show(id){["home","topics","quiz","results"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
-function initSubjects(){$("subjects").innerHTML=Object.keys(BANK).map(s=>'<button class="subject" data-subject="'+s+'"><span class="emoji">'+icons[s]+'</span><strong>'+s+'</strong><small>'+(s==="Chemistry"?"3 topic quizzes":"5 questions")+'</small></button>').join("");document.querySelectorAll("[data-subject]").forEach(b=>b.addEventListener("click",()=>s==="Chemistry"?openTopics():startQuiz(b.dataset.subject)))}
+function initSubjects(){$("subjects").innerHTML=Object.keys(BANK).map(s=>'<button class="subject" data-subject="'+s+'"><span class="emoji">'+icons[s]+'</span><strong>'+s+'</strong><small>'+(s==="Chemistry"?"3 topic quizzes":"5 questions")+'</small></button>').join("");document.querySelectorAll("[data-subject]").forEach(b=>b.addEventListener("click",()=>b.dataset.subject==="Chemistry"?openTopics():startQuiz(b.dataset.subject)))}
 function openTopics(){$("topicChoices").innerHTML=Object.keys(TOPIC_BANK).map(t=>'<button class="subject" data-topic="'+t+'"><span class="emoji">⚛️</span><strong>'+t+'</strong><small>250 question variations · 10 per quiz</small></button>').join("");document.querySelectorAll("[data-topic]").forEach(b=>b.addEventListener("click",()=>startTopic(b.dataset.topic)));show("topics")}
 function startTopic(topic){currentSubject="Chemistry · "+topic;questions=[...TOPIC_BANK[topic]].sort(()=>Math.random()-.5).slice(0,10);index=0;score=0;earned=0;show("quiz");$("subjectPill").textContent="⚗️ "+topic;renderQuestion()}
 function startQuiz(subject){currentSubject=subject;questions=[...BANK[subject]];index=0;score=0;earned=0;show("quiz");$("subjectPill").textContent=icons[subject]+" "+subject;renderQuestion()}
