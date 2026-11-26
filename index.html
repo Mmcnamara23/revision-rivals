@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+<title>Revision Rivals</title>
+<style>
+:root{--bg:#0b1020;--panel:#151d33;--panel2:#1d2944;--text:#f5f7ff;--muted:#aab5d0;--purple:#9275ff;--cyan:#55d6e8;--green:#4ade80;--red:#fb7185;--gold:#ffd166}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#202b50 0%,var(--bg) 55%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:980px;margin:auto;padding:28px 18px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px;font-weight:900;font-size:1.25rem;letter-spacing:-.04em}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:grid;place-items:center;color:#10162b;font-size:22px;box-shadow:0 8px 25px #9275ff44}.wallet{background:#202b45;border:1px solid #34415f;border-radius:999px;padding:10px 15px;font-weight:800;color:var(--gold)}
+.hero{text-align:center;margin:22px auto 30px;max-width:690px}.eyebrow{color:var(--cyan);font-size:.78rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.hero h1{font-size:clamp(2.5rem,7vw,4.8rem);line-height:.98;letter-spacing:-.07em;margin:13px 0}.hero h1 span{background:linear-gradient(90deg,#b7a5ff,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);font-size:1.05rem;line-height:1.6;margin:14px auto}
+.panel{background:linear-gradient(160deg,#1a2540ee,#111a30ee);border:1px solid #34415d;border-radius:24px;padding:clamp(18px,4vw,30px);box-shadow:0 22px 60px #0004}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:18px}.section-head h2{margin:0;font-size:1.35rem;letter-spacing:-.04em}.muted{color:var(--muted)}.subjects{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px}.subject{background:#202c49;border:1px solid #3a496a;border-radius:17px;padding:16px 12px;color:var(--text);text-align:left;cursor:pointer;transition:.18s;font:inherit}.subject:hover{transform:translateY(-3px);border-color:var(--cyan);background:#273657}.subject .emoji{font-size:1.65rem;display:block;margin-bottom:9px}.subject strong{display:block;font-size:.98rem}.subject small{color:var(--muted);display:block;margin-top:4px}
+button{font:inherit}.primary,.secondary{border:0;border-radius:14px;padding:13px 19px;font-weight:900;cursor:pointer;transition:.15s}.primary{background:linear-gradient(100deg,var(--purple),#6d9cff);color:white;box-shadow:0 8px 22px #9275ff35}.primary:hover{filter:brightness(1.1);transform:translateY(-1px)}.secondary{background:#293653;color:var(--text);border:1px solid #465574}.secondary:hover{background:#354565}.full{width:100%;margin-top:18px}
+.hidden{display:none!important}.quiz-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}.pill{background:#263452;border:1px solid #3b4c6d;color:#dce5ff;border-radius:999px;padding:7px 11px;font-size:.82rem;font-weight:800}.progress{height:9px;border-radius:20px;background:#2b3855;overflow:hidden;margin:12px 0 26px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--cyan));transition:width .25s}.q-count{color:var(--muted);font-size:.9rem;font-weight:700}.question{font-size:clamp(1.35rem,4vw,2rem);line-height:1.25;letter-spacing:-.035em;margin:0 0 22px}.answers{display:grid;gap:11px}.answer{width:100%;text-align:left;padding:15px 16px;border-radius:15px;background:#202c49;border:1px solid #3b4a69;color:var(--text);cursor:pointer;font-size:1rem;display:flex;align-items:center;gap:13px}.answer:hover:not(:disabled){border-color:var(--cyan);background:#293958}.letter{width:29px;height:29px;display:grid;place-items:center;border-radius:9px;background:#354363;font-weight:900;flex:none}.answer.correct{border-color:var(--green);background:#153c37}.answer.wrong{border-color:var(--red);background:#492536}.answer:disabled{cursor:default}.feedback{margin-top:17px;padding:15px;border-radius:14px;background:#202d48;color:#dce5ff;line-height:1.5}.feedback.good{border:1px solid #348b68}.feedback.bad{border:1px solid #a34c64}.quiz-actions{display:flex;justify-content:space-between;gap:12px;margin-top:18px;align-items:center}.result{text-align:center}.result .big{font-size:4rem;margin:8px}.result h2{font-size:2rem;margin:8px}.result p{color:var(--muted);line-height:1.6}.statrow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px 0}.stat{background:#202c49;border:1px solid #3b4a69;padding:14px 20px;border-radius:15px;min-width:120px}.stat strong{display:block;font-size:1.5rem}.stat span{font-size:.8rem;color:var(--muted)}.footer{text-align:center;color:#7583a3;font-size:.8rem;margin-top:25px}
+@media(max-width:520px){.wrap{padding:18px 13px 40px}.top{margin-bottom:24px}.quiz-top{align-items:flex-start;flex-direction:column}.quiz-actions{flex-direction:column-reverse}.quiz-actions button{width:100%}.section-head{align-items:start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand"><div class="logo">⚡</div> REVISION RIVALS</div><div class="wallet">🪙 <span id="coinCount">0</span> coins</div></header>
+<main>
+<section id="home">
+<div class="hero"><div class="eyebrow">GCSE revision, with a competitive twist</div><h1>Level up your <span>learning.</span></h1><p>Pick a subject, take on a quick quiz and earn coins for every correct answer. Your revision journey starts here.</p></div>
+<div class="panel"><div class="section-head"><div><h2>Choose your subject</h2><div class="muted">Year 10–11 · Multiple choice</div></div></div><div class="subjects" id="subjects"></div></div>
+</section>
+<section id="quiz" class="hidden">
+<div class="quiz-top"><button class="secondary" id="backHome">← Subjects</button><span class="pill" id="subjectPill">Subject</span><span class="pill">🪙 +10 per correct answer</span></div>
+<div class="panel"><div class="q-count" id="qCount">Question 1 of 5</div><div class="progress"><div id="progressFill"></div></div><h2 class="question" id="questionText"></h2><div class="answers" id="answers"></div><div id="feedback" class="feedback hidden" aria-live="polite"></div><div class="quiz-actions"><span class="muted" id="scoreLive">0 correct</span><button class="primary hidden" id="nextBtn">Next question →</button></div></div>
+</section>
+<section id="results" class="hidden"><div class="panel result"><div class="eyebrow">Quiz complete</div><div class="big" id="resultEmoji">🏆</div><h2 id="resultTitle">Nice work!</h2><p id="resultText"></p><div class="statrow"><div class="stat"><strong id="finalScore">0/5</strong><span>Correct answers</span></div><div class="stat"><strong id="earnedCoins">0</strong><span>Coins earned</span></div><div class="stat"><strong id="totalCoins">0</strong><span>Total coins</span></div></div><button class="primary full" id="againBtn">Play another subject</button></div></section>
+</main>
+<div class="footer">Revision Rivals · Keep practising, keep progressing ✦</div>
+</div>
+<script>
+const BANK = {
+"Maths":[
+{q:"Solve: 3x + 7 = 22",a:["x = 3","x = 5","x = 7","x = 9"],c:1,e:"Subtract 7 from both sides, then divide by 3: x = 5."},
+{q:"What is the gradient of the line y = 4x − 2?",a:["−2","2","4","−4"],c:2,e:"In y = mx + c, the gradient is the coefficient of x, so it is 4."},
+{q:"A right-angled triangle has shorter sides 6 cm and 8 cm. What is its hypotenuse?",a:["9 cm","10 cm","12 cm","14 cm"],c:1,e:"Using Pythagoras: √(6² + 8²) = √100 = 10 cm."},
+{q:"What is 15% of 240?",a:["24","30","36","40"],c:2,e:"10% is 24 and 5% is 12, so 15% is 36."},
+{q:"Factorise x² + 7x + 12.",a:["(x + 2)(x + 6)","(x + 3)(x + 4)","(x − 3)(x − 4)","(x + 1)(x + 12)"],c:1,e:"3 and 4 multiply to 12 and add to 7."}
+],
+"Biology":[
+{q:"Which organelle is the main site of aerobic respiration?",a:["Nucleus","Ribosome","Mitochondrion","Chloroplast"],c:2,e:"Mitochondria are where most aerobic respiration takes place."},
+{q:"What is the function of the xylem in a plant?",a:["Transport sugars","Transport water and mineral ions","Make pollen","Absorb light"],c:1,e:"Xylem vessels carry water and mineral ions from roots towards the leaves."},
+{q:"Which molecule carries genetic information?",a:["Starch","DNA","Glucose","Protein"],c:1,e:"DNA stores the genetic instructions used by living organisms."},
+{q:"Where does gas exchange take place in the lungs?",a:["Trachea","Bronchi","Alveoli","Diaphragm"],c:2,e:"Alveoli have thin walls and a large surface area for gas exchange."},
+{q:"What is the term for water moving through a partially permeable membrane?",a:["Diffusion","Active transport","Osmosis","Transpiration"],c:2,e:"Osmosis is the net movement of water through a partially permeable membrane."}
+],
+"Chemistry":[
+{q:"What is the pH of a neutral solution at room temperature?",a:["0","5","7","14"],c:2,e:"A neutral solution has pH 7 at room temperature."},
+{q:"Which subatomic particle has a negative charge?",a:["Proton","Neutron","Electron","Nucleus"],c:2,e:"Electrons have a relative charge of −1."},
+{q:"What type of bonding involves electrostatic attraction between oppositely charged ions?",a:["Covalent","Ionic","Metallic","Hydrogen"],c:1,e:"Ionic bonding is the strong electrostatic attraction between oppositely charged ions."},
+{q:"What is the chemical formula for magnesium oxide?",a:["MgO","Mg₂O","MgO₂","MnO"],c:0,e:"Magnesium forms Mg²⁺ and oxygen forms O²⁻, giving a 1:1 ratio."},
+{q:"Which gas is produced when an acid reacts with a carbonate?",a:["Hydrogen","Oxygen","Carbon dioxide","Nitrogen"],c:2,e:"Acid + carbonate → salt + water + carbon dioxide."}
+],
+"Physics":[
+{q:"What is the unit of electrical resistance?",a:["Volt","Ampere","Ohm","Watt"],c:2,e:"Electrical resistance is measured in ohms (Ω)."},
+{q:"A car travels 150 m in 10 s. What is its average speed?",a:["10 m/s","15 m/s","20 m/s","25 m/s"],c:1,e:"Speed = distance ÷ time = 150 ÷ 10 = 15 m/s."},
+{q:"Which type of wave can travel through a vacuum?",a:["Sound","Water","Electromagnetic","Seismic S"],c:2,e:"Electromagnetic waves do not need a medium, so they travel through a vacuum."},
+{q:"What happens to the resistance of a typical metal wire as its temperature increases?",a:["It decreases","It increases","It stays the same","It becomes zero"],c:1,e:"As the metal gets hotter, its ions vibrate more and make it harder for charge to flow."},
+{q:"What is the equation linking force, mass and acceleration?",a:["F = m ÷ a","F = ma","F = a ÷ m","F = m + a"],c:1,e:"Newton's second law: resultant force = mass × acceleration."}
+],
+"English":[
+{q:"What is a metaphor?",a:["A comparison using 'like' or 'as'","A direct comparison saying one thing is another","A repeated consonant sound","An exaggeration"],c:1,e:"A metaphor describes something as something else to create meaning."},
+{q:"What is the term for the voice telling a story?",a:["Audience","Narrator","Protagonist","Editor"],c:1,e:"The narrator is the voice or perspective through which a story is told."},
+{q:"Which technique is used in 'the wind whispered'?",a:["Personification","Onomatopoeia","Rhyme","Hyperbole"],c:0,e:"The wind is given a human action: whispering."},
+{q:"What does a semicolon commonly join?",a:["Two closely related independent clauses","A heading and a paragraph","A noun and adjective","A question and answer"],c:0,e:"A semicolon can link two closely related independent clauses."},
+{q:"What is dramatic irony?",a:["The audience knows something a character does not","A character speaks in rhyme","The ending is always happy","The narrator speaks directly to the reader"],c:0,e:"Dramatic irony occurs when the audience has information that a character lacks."}
+],
+"History":[
+{q:"In which year did the First World War begin?",a:["1905","1914","1918","1939"],c:1,e:"The First World War began in 1914."},
+{q:"Which document limited the power of the English monarch in 1215?",a:["Domesday Book","Magna Carta","Bill of Rights","Act of Union"],c:1,e:"Magna Carta was agreed in 1215 and placed limits on royal authority."},
+{q:"Who was the British Prime Minister for most of the Second World War?",a:["Neville Chamberlain","Clement Attlee","Winston Churchill","Harold Macmillan"],c:2,e:"Winston Churchill was Prime Minister from 1940 to 1945."},
+{q:"The Cold War was mainly a rivalry between which two superpowers?",a:["Britain and France","USA and USSR","China and Japan","Germany and Italy"],c:1,e:"The USA and Soviet Union were the main rivals during the Cold War."},
+{q:"What was the main purpose of the League of Nations?",a:["To encourage international peace","To create the euro","To run the British Empire","To control oil prices"],c:0,e:"The League aimed to prevent war through collective security and cooperation."}
+],
+"Geography":[
+{q:"What is the name for the boundary where two tectonic plates move apart?",a:["Destructive","Conservative","Constructive","Collision"],c:2,e:"At a constructive (divergent) boundary, plates move apart and magma can rise."},
+{q:"Which process wears away rock through the action of rivers, waves or wind?",a:["Deposition","Erosion","Condensation","Precipitation"],c:1,e:"Erosion is the wearing away and transport of rock or sediment."},
+{q:"What is urbanisation?",a:["Growth in the proportion of people living in towns and cities","The decline of farming","Movement from cities to villages","The formation of a volcano"],c:0,e:"Urbanisation is the increasing percentage of a population living in urban areas."},
+{q:"Which atmospheric layer contains most of the weather?",a:["Stratosphere","Mesosphere","Troposphere","Thermosphere"],c:2,e:"Most weather occurs in the troposphere, the lowest layer of the atmosphere."},
+{q:"What does a contour line on a map connect?",a:["Places with equal rainfall","Places with equal height","Places with equal population","Places with equal temperature"],c:1,e:"Contour lines join points of equal height above sea level."}
+]
+};
+const icons={"Maths":"📐","Biology":"🧬","Chemistry":"⚗️","Physics":"⚡","English":"📚","History":"🏛️","Geography":"🌍"};
+let coins=Number(localStorage.getItem("rr-coins")||0), currentSubject="", questions=[], index=0, score=0, earned=0, answered=false;
+const $=id=>document.getElementById(id);
+function updateCoins(){$("coinCount").textContent=coins;localStorage.setItem("rr-coins",String(coins))}
+function show(id){["home","quiz","results"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function initSubjects(){$("subjects").innerHTML=Object.keys(BANK).map(s=>'<button class="subject" data-subject="'+s+'"><span class="emoji">'+icons[s]+'</span><strong>'+s+'</strong><small>5 questions</small></button>').join("");document.querySelectorAll("[data-subject]").forEach(b=>b.addEventListener("click",()=>startQuiz(b.dataset.subject)))}
+function startQuiz(subject){currentSubject=subject;questions=[...BANK[subject]];index=0;score=0;earned=0;show("quiz");$("subjectPill").textContent=icons[subject]+" "+subject;renderQuestion()}
+function renderQuestion(){answered=false;const q=questions[index];$("qCount").textContent="Question "+(index+1)+" of "+questions.length;$("progressFill").style.width=(index/questions.length*100)+"%";$("questionText").textContent=q.q;$("answers").innerHTML=q.a.map((a,i)=>'<button class="answer" data-index="'+i+'"><span class="letter">'+String.fromCharCode(65+i)+'</span><span>'+a+'</span></button>').join("");document.querySelectorAll(".answer").forEach(b=>b.addEventListener("click",()=>chooseAnswer(Number(b.dataset.index))));$("feedback").className="feedback hidden";$("nextBtn").classList.add("hidden");$("scoreLive").textContent=score+" correct"}
+function chooseAnswer(choice){if(answered)return;answered=true;const q=questions[index], correct=choice===q.c;document.querySelectorAll(".answer").forEach((b,i)=>{b.disabled=true;if(i===q.c)b.classList.add("correct");else if(i===choice)b.classList.add("wrong")});if(correct){score++;earned+=10;coins+=10;updateCoins()}const f=$("feedback");f.className="feedback "+(correct?"good":"bad");f.innerHTML=(correct?"<strong>✓ Correct! +10 coins</strong><br>":"<strong>Not quite — keep going!</strong><br>")+"<span>"+q.e+"</span>";$("scoreLive").textContent=score+" correct";$("nextBtn").textContent=index===questions.length-1?"See results →":"Next question →";$("nextBtn").classList.remove("hidden")}
+function finish(){show("results");$("progressFill").style.width="100%";$("finalScore").textContent=score+"/"+questions.length;$("earnedCoins").textContent=earned;$("totalCoins").textContent=coins;$("resultEmoji").textContent=score===5?"🏆":score>=3?"✨":"💪";$("resultTitle").textContent=score===5?"Perfect score!":score>=3?"Great effort!":"Keep building your streak!";$("resultText").textContent="You finished "+currentSubject+". You got "+score+" out of "+questions.length+" correct and earned "+earned+" coins. Every question is progress."}
+$("nextBtn").addEventListener("click",()=>{if(!answered)return;if(index<questions.length-1){index++;renderQuestion()}else finish()});
+$("backHome").addEventListener("click",()=>show("home"));$("againBtn").addEventListener("click",()=>show("home"));
+updateCoins();initSubjects();
+</script>
+</body>
+</html>
