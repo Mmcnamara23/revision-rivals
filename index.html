@@ -24,6 +24,12 @@ button{font:inherit}.primary,.secondary{border:0;border-radius:14px;padding:13px
 <div class="hero"><div class="eyebrow">GCSE revision, with a competitive twist</div><h1>Level up your <span>learning.</span></h1><p>Pick a subject, take on a quick quiz and earn coins for every correct answer. Your revision journey starts here.</p></div>
 <div class="panel"><div class="section-head"><div><h2>Choose your subject</h2><div class="muted">Year 10–11 · Multiple choice</div></div></div><div class="subjects" id="subjects"></div></div>
 </section>
+
+<section id="topics" class="hidden">
+<div class="quiz-top"><button class="secondary" id="backSubjects">← Subjects</button><span class="pill">⚗️ Chemistry</span></div>
+<div class="panel"><div class="section-head"><div><h2>Choose a Chemistry topic</h2><div class="muted">Pick what you want to revise · 10 random questions per quiz</div></div></div>
+<div class="subjects" id="topicChoices"></div></div>
+</section>
 <section id="quiz" class="hidden">
 <div class="quiz-top"><button class="secondary" id="backHome">← Subjects</button><span class="pill" id="subjectPill">Subject</span><span class="pill">🪙 +10 per correct answer</span></div>
 <div class="panel"><div class="q-count" id="qCount">Question 1 of 5</div><div class="progress"><div id="progressFill"></div></div><h2 class="question" id="questionText"></h2><div class="answers" id="answers"></div><div id="feedback" class="feedback hidden" aria-live="polite"></div><div class="quiz-actions"><span class="muted" id="scoreLive">0 correct</span><button class="primary hidden" id="nextBtn">Next question →</button></div></div>
@@ -84,18 +90,121 @@ const BANK = {
 {q:"What does a contour line on a map connect?",a:["Places with equal rainfall","Places with equal height","Places with equal population","Places with equal temperature"],c:1,e:"Contour lines join points of equal height above sea level."}
 ]
 };
+
+const CHEM_TOPICS = {
+"Ionic Bonding": [
+["What happens to electrons when sodium forms a sodium ion?","It loses one electron",["It gains one electron","It shares one electron","It loses two electrons"],"Sodium loses its outer electron to form Na⁺."],
+["What charge does a chloride ion have?","−1",["+1","−2","+2"],"A chlorine atom gains one electron to form Cl⁻."],
+["What holds oppositely charged ions together?","Strong electrostatic attraction",["A shared pair of electrons","Magnetic attraction","Weak intermolecular forces"],"Ionic bonds are electrostatic attractions between oppositely charged ions."],
+["What is the formula of magnesium chloride?","MgCl₂",["MgCl","Mg₂Cl","Mg₂Cl₃"],"Mg²⁺ needs two Cl⁻ ions to balance the charge."],
+["Which elements usually form ionic compounds?","A metal and a non-metal",["Two metals","Two noble gases","Two non-metals only"],"Ionic compounds commonly form when electrons transfer from metals to non-metals."],
+["What is the charge on an oxide ion?","2−",["1−","1+","2+"],"Oxygen gains two electrons to form O²⁻."],
+["Why are ionic compounds usually neutral overall?","The total positive and negative charges balance",["They contain no charged particles","Every ion has zero charge","Electrons disappear"],"The formula gives a ratio where total charge adds to zero."],
+["What is the formula of calcium oxide?","CaO",["Ca₂O","CaO₂","Ca₂O₃"],"Ca²⁺ and O²⁻ combine in a 1:1 ratio."],
+["What structure do solid ionic compounds form?","A giant ionic lattice",["Simple molecules","A metallic sea","A single chain of atoms"],"Ions form a regular, repeating 3D lattice."],
+["Why do ionic compounds often have high melting points?","Strong attractions between ions need lots of energy to overcome",["Their molecules are very large","They contain weak covalent bonds","They evaporate easily"],"Many strong electrostatic attractions hold the lattice together."],
+["Why can molten ionic compounds conduct electricity?","Their ions are free to move",["Their electrons are delocalised","Their atoms become neutral","They contain moving protons"],"Mobile ions carry electrical charge in the molten state."],
+["Why does solid sodium chloride not conduct electricity?","Its ions are fixed in place",["It has no ions","It contains no electrons","Its ions have no charge"],"The ions cannot move through the solid lattice."],
+["What happens to a chlorine atom when it forms Cl⁻?","It gains one electron",["It loses one electron","It gains one proton","It loses one neutron"],"A chloride ion has one more electron than a chlorine atom."],
+["Which formula correctly represents aluminium oxide?","Al₂O₃",["AlO","AlO₂","Al₃O₂"],"Two Al³⁺ ions balance three O²⁻ ions."],
+["What type of particle is formed when an atom gains electrons?","A negative ion",["A positive ion","A neutron","A molecule only"],"Gaining negatively charged electrons makes an ion negative."],
+["What type of particle is formed when an atom loses electrons?","A positive ion",["A negative ion","An isotope","A neutral molecule"],"Losing electrons leaves more protons than electrons."],
+["Which ion is formed by potassium?","K⁺",["K²⁺","K⁻","K²⁻"],"Potassium is in Group 1 and loses one electron."],
+["Which ion is formed by a Group 2 metal?","A 2+ ion",["A 1+ ion","A 1− ion","A 2− ion"],"Group 2 metals lose two outer-shell electrons."],
+["Which ion is formed by a Group 7 atom?","A 1− ion",["A 1+ ion","A 2+ ion","A 3− ion"],"Group 7 atoms gain one electron to complete their outer shell."],
+["What does the formula unit of an ionic compound show?","The simplest whole-number ratio of ions",["The exact shape of each ion","The number of molecules in a sample","The order of atoms in a chain"],"Ionic compounds are lattices, so formulae show ion ratios."],
+["Which property is typical of ionic compounds?","They are often brittle crystalline solids",["They are always soft gases","They are all liquids at room temperature","They stretch like metals"],"Ionic lattices form crystals and can shatter when layers shift."],
+["What happens when layers in an ionic lattice shift?","Like charges can line up and repel",["All ions become neutral","The ions turn into atoms permanently","The lattice becomes metallic"],"Repulsion between like-charged ions can split the crystal."],
+["What is the name of Na⁺?","Sodium ion",["Sodium molecule","Sodium neutron","Sodium isotope"],"Positive ions formed by metals keep the element name followed by ion."],
+["What is the name of O²⁻?","Oxide ion",["Oxygen ionide","Oxonium ion","Oxygen molecule"],"The negative ion of oxygen is called oxide."],
+["Why do atoms form ions in ionic bonding?","To achieve a more stable outer electron arrangement",["To increase their number of protons","To remove their nuclei","To make all atoms the same size"],"Electron transfer can give ions a full outer shell."]
+],
+"Covalent Bonding": [
+["What is a covalent bond?","A shared pair of electrons",["A transfer of protons","A sea of delocalised electrons","An attraction between ions only"],"A covalent bond is a shared pair of electrons between atoms."],
+["Which type of elements usually form covalent bonds with each other?","Non-metals",["Metals only","Metals and noble gases only","Positive ions only"],"Covalent bonding commonly occurs between non-metal atoms."],
+["How many pairs of electrons are shared in a single covalent bond?","One",["Two","Three","Four"],"A single covalent bond contains one shared pair."],
+["How many pairs of electrons are shared in a double bond?","Two",["One","Three","Four"],"A double bond contains two shared pairs of electrons."],
+["How many pairs of electrons are shared in a triple bond?","Three",["One","Two","Four"],"A triple bond contains three shared pairs."],
+["How many covalent bonds does a hydrogen atom usually form?","One",["Two","Three","Four"],"Hydrogen needs one more electron in its first shell."],
+["How many covalent bonds does oxygen usually form in simple molecules?","Two",["One","Three","Four"],"Oxygen has six outer electrons and commonly shares two pairs."],
+["How many covalent bonds does nitrogen usually form?","Three",["One","Two","Four"],"Nitrogen commonly shares three pairs to complete its outer shell."],
+["What is the formula of a water molecule?","H₂O",["HO","H₂O₂","OH₃"],"A water molecule contains two hydrogen atoms and one oxygen atom."],
+["What type of bonding holds the atoms together within a methane molecule?","Covalent bonding",["Ionic bonding","Metallic bonding","Electrostatic attraction between ions"],"Carbon shares electron pairs with four hydrogen atoms."],
+["What is the formula of carbon dioxide?","CO₂",["CO","C₂O","C₂O₂"],"One carbon atom bonds with two oxygen atoms."],
+["What is a simple molecular substance made of?","Small molecules with covalent bonds within them",["A giant ionic lattice","Positive metal ions only","A lattice of atoms with delocalised electrons"],"Simple molecular substances contain separate covalently bonded molecules."],
+["Why do many simple molecular substances have low boiling points?","Weak intermolecular forces need little energy to overcome",["Covalent bonds are always weak","Their atoms have no electrons","They contain ionic lattices"],"Boiling separates molecules by overcoming intermolecular forces, not covalent bonds."],
+["What happens to covalent bonds when a simple molecular substance boils?","They usually remain intact",["They all break","They become ionic","They transfer electrons"],"Boiling overcomes forces between molecules, not bonds within them."],
+["Why does diamond have a very high melting point?","It has a giant covalent structure with many strong bonds",["It is made of separate small molecules","It contains mobile ions","It has weak intermolecular forces"],"A lot of energy is needed to break its extensive covalent network."],
+["How many covalent bonds does each carbon atom form in diamond?","Four",["Two","Three","Six"],"Each carbon bonds to four other carbon atoms in a 3D network."],
+["How many covalent bonds does each carbon atom form in graphite?","Three",["One","Two","Four"],"Each carbon bonds to three others in layers."],
+["Why can graphite conduct electricity?","It has delocalised electrons that can move along its layers",["It contains mobile positive ions","It is a metal","Its covalent bonds all move freely"],"One electron per carbon is delocalised and can carry charge."],
+["Why is graphite soft and slippery?","Weak forces between its layers allow them to slide",["Its covalent bonds are weak","It has no bonds","Its atoms are liquid"],"Strong bonds hold each layer, but weaker forces act between layers."],
+["Why is diamond hard?","Its strong covalent bonds form a rigid 3D network",["Its layers slide easily","It contains free ions","It is made of liquid carbon"],"The continuous 3D network resists movement."],
+["What is the bonding in a chlorine molecule, Cl₂?","One shared pair of electrons",["Two transferred electrons","A metallic lattice","An ionic bond"],"Each chlorine atom shares one electron with the other."],
+["What is the bonding in an oxygen molecule, O₂?","A double covalent bond",["A single covalent bond","A triple covalent bond","An ionic bond"],"The two oxygen atoms share two pairs of electrons."],
+["What is the bonding in a nitrogen molecule, N₂?","A triple covalent bond",["A single covalent bond","A double covalent bond","An ionic bond"],"The nitrogen atoms share three pairs of electrons."],
+["What does a dot-and-cross diagram show?","Outer-shell electrons and which atom they come from",["The size of the nucleus","The paths of electrons","The mass of each atom"],"Dot-and-cross diagrams show electron arrangements in bonds."],
+["Why do atoms share electrons in covalent bonding?","To help fill their outer electron shells",["To change their number of protons","To form positive and negative ions","To lose their nuclei"],"Sharing can give atoms a stable outer-shell arrangement."]
+],
+"Metallic Bonding": [
+["What particles are arranged in a metal lattice?","Positive metal ions",["Negative non-metal ions","Separate molecules","Neutral gas atoms"],"Metal atoms lose outer electrons and form positive ions in a lattice."],
+["What is the 'sea' in the sea of delocalised electrons model?","Electrons free to move through the metal",["Molten metal","A layer of water","Positive ions moving between atoms"],"Delocalised electrons are not attached to one particular atom."],
+["What holds a metal together?","Attraction between positive ions and delocalised electrons",["Shared pairs between fixed pairs of atoms","Attraction between negative ions","Weak forces between molecules"],"Metallic bonding is electrostatic attraction between ions and delocalised electrons."],
+["Why do metals conduct electricity?","Delocalised electrons can move and carry charge",["Positive ions flow through the solid","Metal atoms become gases","They contain water"],"Mobile delocalised electrons transfer electrical charge."],
+["Why can metals be bent and shaped?","Layers of ions can slide while metallic bonding remains",["Their atoms are separate molecules","All metallic bonds break permanently","They contain weak ionic layers"],"The non-directional metallic bonding continues as layers shift."],
+["What does malleable mean?","Can be hammered or pressed into shape",["Can be drawn into wires only","Dissolves in water","Conducts no electricity"],"Malleable materials can be shaped without snapping."],
+["What does ductile mean?","Can be drawn into wires",["Can be shattered easily","Has a low density","Cannot conduct electricity"],"Ductile metals can be stretched into wires."],
+["Why do many metals have high melting points?","There is strong attraction between ions and delocalised electrons",["They contain weak intermolecular forces","Their atoms are separate molecules","They have no structure"],"A lot of energy is needed to overcome metallic bonding."],
+["What happens to the outer electrons of metal atoms in the metallic model?","They become delocalised",["They are transferred to non-metals","They disappear","They become neutrons"],"Outer electrons are free to move throughout the metal structure."],
+["Which type of bonding is found in copper?","Metallic bonding",["Ionic bonding","Simple molecular covalent bonding","Hydrogen bonding"],"Copper is a metal with positive ions and delocalised electrons."],
+["Why are metals generally good thermal conductors?","Mobile electrons transfer energy through the structure",["Their ions evaporate","They contain air pockets","They have weak molecular forces"],"Free electrons help transfer thermal energy rapidly."],
+["What is an alloy?","A mixture of a metal with one or more other elements",["A pure non-metal","A single covalent molecule","A type of ion"],"Alloys contain a metal and other element(s), often to change properties."],
+["Why can an alloy be harder than a pure metal?","Different-sized atoms disrupt the regular layers and make sliding harder",["It has no metallic bonding","All its electrons are fixed","It contains only identical atoms"],"Different atom sizes distort layers and hinder movement."],
+["What is the structure of most solid metals?","A giant lattice of positive ions",["Small separate molecules","A giant covalent network","A lattice of negative ions"],"Metal ions are arranged in a regular giant structure."],
+["Are delocalised electrons attached to one specific metal ion?","No, they can move throughout the structure",["Yes, each belongs to one ion","They are fixed in the nucleus","They only move when metal melts"],"Delocalised means spread out and not tied to one atom."],
+["Why can solid metals conduct electricity but solid ionic compounds usually cannot?","Metals have mobile electrons; solid ionic ions are fixed",["Metals have no charged particles","Ionic compounds have no electrons","Both conduct by moving nuclei"],"Metals have mobile delocalised electrons, unlike fixed ions in solid ionic lattices."],
+["What is the charge on a typical metal ion in the metallic lattice?","Positive",["Negative","Always zero","Both positive and negative at once"],"Metal atoms release outer electrons and become positive ions."],
+["Which material is likely to have metallic bonding?","Aluminium",["Water","Sodium chloride","Carbon dioxide"],"Aluminium is a metal and has metallic bonding."],
+["What happens to metallic conductivity if the metal is connected in a circuit?","Delocalised electrons drift through the metal",["Positive ions travel around the circuit","The metal turns into a liquid","Covalent bonds carry the current"],"Electrons move through the metal when a potential difference is applied."],
+["Why are metals often shiny?","Their delocalised electrons interact with and reflect light",["They have transparent molecules","They contain water","Their ions glow"],"Free electrons at the surface help reflect visible light."],
+["What is the main bonding model for a pure metal?","Positive ions in a lattice surrounded by delocalised electrons",["Alternating positive and negative ions","Molecules joined by weak forces","Atoms sharing fixed pairs in separate molecules"],"This is the GCSE model of metallic structure and bonding."],
+["Which property makes copper useful for electrical wiring?","Good electrical conductivity and ductility",["Brittleness and low conductivity","High solubility in water","Being a gas at room temperature"],"Copper conducts well and can be drawn into wires."],
+["What happens to the strength of metallic bonding when attraction between ions and electrons is stronger?","More energy is needed to separate the particles",["The metal must become a gas immediately","Conductivity becomes zero","The ions become negative"],"Stronger electrostatic attraction generally means a higher melting point."],
+["Why do metals usually have high density?","Their atoms/ions are often closely packed in a lattice",["They contain large gaps filled with air","They are made of gas molecules","They have no particles"],"Many metal structures pack particles closely together."],
+["What is a common difference between a pure metal and an alloy?","An alloy contains more than one type of element",["A pure metal has no atoms","An alloy has no electrons","A pure metal is always a liquid"],"Alloys are mixtures, while a pure metal contains one element."]
+]
+};
+function buildTopicPool(rows){
+ const variants=[
+  q=>q,
+  q=>"Choose the correct answer: "+q,
+  q=>"GCSE check: "+q,
+  q=>"Which option best answers this question? "+q,
+  q=>"Select the scientifically correct answer. "+q,
+  q=>"Test your understanding: "+q,
+  q=>"Which statement is correct? "+q,
+  q=>"For this bonding topic, answer: "+q,
+  q=>"Pick the best answer: "+q,
+  q=>"Revision question: "+q
+ ];
+ return rows.flatMap((r,i)=>variants.map((make,j)=>({q:make(r[0]),a:[r[1],...r[2]],c:0,e:r[3],key:i+"-"+j})));
+}
+const TOPIC_BANK=Object.fromEntries(Object.entries(CHEM_TOPICS).map(([name,rows])=>[name,buildTopicPool(rows)]));
+
 const icons={"Maths":"📐","Biology":"🧬","Chemistry":"⚗️","Physics":"⚡","English":"📚","History":"🏛️","Geography":"🌍"};
 let coins=Number(localStorage.getItem("rr-coins")||0), currentSubject="", questions=[], index=0, score=0, earned=0, answered=false;
 const $=id=>document.getElementById(id);
 function updateCoins(){$("coinCount").textContent=coins;localStorage.setItem("rr-coins",String(coins))}
-function show(id){["home","quiz","results"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
-function initSubjects(){$("subjects").innerHTML=Object.keys(BANK).map(s=>'<button class="subject" data-subject="'+s+'"><span class="emoji">'+icons[s]+'</span><strong>'+s+'</strong><small>5 questions</small></button>').join("");document.querySelectorAll("[data-subject]").forEach(b=>b.addEventListener("click",()=>startQuiz(b.dataset.subject)))}
+function show(id){["home","topics","quiz","results"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function initSubjects(){$("subjects").innerHTML=Object.keys(BANK).map(s=>'<button class="subject" data-subject="'+s+'"><span class="emoji">'+icons[s]+'</span><strong>'+s+'</strong><small>'+(s==="Chemistry"?"3 topic quizzes":"5 questions")+'</small></button>').join("");document.querySelectorAll("[data-subject]").forEach(b=>b.addEventListener("click",()=>s==="Chemistry"?openTopics():startQuiz(b.dataset.subject)))}
+function openTopics(){$("topicChoices").innerHTML=Object.keys(TOPIC_BANK).map(t=>'<button class="subject" data-topic="'+t+'"><span class="emoji">⚛️</span><strong>'+t+'</strong><small>250 question variations · 10 per quiz</small></button>').join("");document.querySelectorAll("[data-topic]").forEach(b=>b.addEventListener("click",()=>startTopic(b.dataset.topic)));show("topics")}
+function startTopic(topic){currentSubject="Chemistry · "+topic;questions=[...TOPIC_BANK[topic]].sort(()=>Math.random()-.5).slice(0,10);index=0;score=0;earned=0;show("quiz");$("subjectPill").textContent="⚗️ "+topic;renderQuestion()}
 function startQuiz(subject){currentSubject=subject;questions=[...BANK[subject]];index=0;score=0;earned=0;show("quiz");$("subjectPill").textContent=icons[subject]+" "+subject;renderQuestion()}
 function renderQuestion(){answered=false;const q=questions[index];$("qCount").textContent="Question "+(index+1)+" of "+questions.length;$("progressFill").style.width=(index/questions.length*100)+"%";$("questionText").textContent=q.q;$("answers").innerHTML=q.a.map((a,i)=>'<button class="answer" data-index="'+i+'"><span class="letter">'+String.fromCharCode(65+i)+'</span><span>'+a+'</span></button>').join("");document.querySelectorAll(".answer").forEach(b=>b.addEventListener("click",()=>chooseAnswer(Number(b.dataset.index))));$("feedback").className="feedback hidden";$("nextBtn").classList.add("hidden");$("scoreLive").textContent=score+" correct"}
 function chooseAnswer(choice){if(answered)return;answered=true;const q=questions[index], correct=choice===q.c;document.querySelectorAll(".answer").forEach((b,i)=>{b.disabled=true;if(i===q.c)b.classList.add("correct");else if(i===choice)b.classList.add("wrong")});if(correct){score++;earned+=10;coins+=10;updateCoins()}const f=$("feedback");f.className="feedback "+(correct?"good":"bad");f.innerHTML=(correct?"<strong>✓ Correct! +10 coins</strong><br>":"<strong>Not quite — keep going!</strong><br>")+"<span>"+q.e+"</span>";$("scoreLive").textContent=score+" correct";$("nextBtn").textContent=index===questions.length-1?"See results →":"Next question →";$("nextBtn").classList.remove("hidden")}
-function finish(){show("results");$("progressFill").style.width="100%";$("finalScore").textContent=score+"/"+questions.length;$("earnedCoins").textContent=earned;$("totalCoins").textContent=coins;$("resultEmoji").textContent=score===5?"🏆":score>=3?"✨":"💪";$("resultTitle").textContent=score===5?"Perfect score!":score>=3?"Great effort!":"Keep building your streak!";$("resultText").textContent="You finished "+currentSubject+". You got "+score+" out of "+questions.length+" correct and earned "+earned+" coins. Every question is progress."}
+function finish(){show("results");$("progressFill").style.width="100%";$("finalScore").textContent=score+"/"+questions.length;$("earnedCoins").textContent=earned;$("totalCoins").textContent=coins;$("resultEmoji").textContent=score===questions.length?"🏆":score>=Math.ceil(questions.length*.6)?"✨":"💪";$("resultTitle").textContent=score===questions.length?"Perfect score!":score>=Math.ceil(questions.length*.6)?"Great effort!":"Keep building your streak!";$("resultText").textContent="You finished "+currentSubject+". You got "+score+" out of "+questions.length+" correct and earned "+earned+" coins. Every question is progress."}
 $("nextBtn").addEventListener("click",()=>{if(!answered)return;if(index<questions.length-1){index++;renderQuestion()}else finish()});
-$("backHome").addEventListener("click",()=>show("home"));$("againBtn").addEventListener("click",()=>show("home"));
+$("backHome").addEventListener("click",()=>show("home"));$("backSubjects").addEventListener("click",()=>show("home"));$("againBtn").addEventListener("click",()=>show("home"));
 updateCoins();initSubjects();
 </script>
 </body>
