@@ -18,7 +18,7 @@ button{font:inherit}.primary,.secondary{border:0;border-radius:14px;padding:13px
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="brand"><div class="logo">⚡</div> REVISION RIVALS</div><div class="wallet">🪙 <span id="coinCount">0</span> coins</div></header>
+<header class="top"><div class="brand"><div class="logo">⚡</div> REVISION RIVALS</div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="secondary" id="shopNav">🛍️ Shop</button><button class="secondary" id="albumNav">📖 Album</button><div class="wallet">🪙 <span id="coinCount">0</span> coins</div></div></header>
 <main>
 <section id="home">
 <div class="hero"><div class="eyebrow">GCSE revision, with a competitive twist</div><h1>Level up your <span>learning.</span></h1><p>Pick a subject, take on a quick quiz and earn coins for every correct answer. Your revision journey starts here.</p></div>
@@ -35,6 +35,7 @@ button{font:inherit}.primary,.secondary{border:0;border-radius:14px;padding:13px
 <div class="panel"><div class="q-count" id="qCount">Question 1 of 5</div><div class="progress"><div id="progressFill"></div></div><h2 class="question" id="questionText"></h2><div class="answers" id="answers"></div><div id="feedback" class="feedback hidden" aria-live="polite"></div><div class="quiz-actions"><span class="muted" id="scoreLive">0 correct</span><button class="primary hidden" id="nextBtn">Next question →</button></div></div>
 </section>
 <section id="results" class="hidden"><div class="panel result"><div class="eyebrow">Quiz complete</div><div class="big" id="resultEmoji">🏆</div><h2 id="resultTitle">Nice work!</h2><p id="resultText"></p><div class="statrow"><div class="stat"><strong id="finalScore">0/5</strong><span>Correct answers</span></div><div class="stat"><strong id="earnedCoins">0</strong><span>Coins earned</span></div><div class="stat"><strong id="totalCoins">0</strong><span>Total coins</span></div></div><button class="primary full" id="againBtn">Play another subject</button></div></section>
+<section id="shop" class="hidden"><div class="quiz-top"><button class="secondary" id="shopHome">← Home</button><span class="pill">🛍️ Pack shop</span></div><div class="panel"><div class="section-head"><div><h2>Revision Pro Pack</h2><div class="muted">One pack. One player. Add them to your album.</div></div><span class="pill">🪙 100 coins</span></div><div style="font-size:4rem;text-align:center;padding:18px">🎁</div><p class="muted" style="text-align:center;line-height:1.6">Open a Revision Pro Pack to discover one player. Rarity is based on their rating. Players can appear more than once, but your album records each player you have collected.</p><button class="primary full" id="openPack">Open Revision Pro Pack · 100 coins</button><div id="packResult" class="feedback hidden" aria-live="polite"></div></div></section><section id="album" class="hidden"><div class="quiz-top"><button class="secondary" id="albumHome">← Home</button><span class="pill">📖 Player album</span></div><div class="panel"><div class="section-head"><div><h2>Your players</h2><div class="muted" id="albumCount">0 of 19 collected</div></div></div><div class="subjects" id="playerAlbum"></div></div></section>
 </main>
 <div class="footer">Revision Rivals · Keep practising, keep progressing ✦</div>
 </div>
@@ -191,6 +192,22 @@ function buildTopicPool(rows){
 }
 const TOPIC_BANK=Object.fromEntries(Object.entries(CHEM_TOPICS).map(([name,rows])=>[name,buildTopicPool(rows)]));
 
+
+const PLAYERS=[
+{name:"Brody Doel",rating:82},{name:"Dexter Chadwick",rating:83},{name:"Matthew Bardsley",rating:81},
+{name:"Numaii Leslie-Madden",rating:80},{name:"Freddie Fifield",rating:80},{name:"Max Rolfe",rating:79},
+{name:"Ashton Elliott",rating:83},{name:"Oscar Robert Harper",rating:84},{name:"Jayden Jobarteh",rating:81},
+{name:"Henry James Worsell",rating:null},{name:"Vittorio Petruzzelli",rating:84},{name:"Zain Miah",rating:81},
+{name:"Lil Mumps",rating:87},{name:"Benjamin Fraser",rating:55},{name:"Ollie Dixon",rating:81},
+{name:"Bradley West",rating:89},{name:"Jake Xhelo",rating:81},{name:"Blake Weller",rating:79},{name:"Henry Burton",rating:83}
+];
+function rarity(p){if(p.rating===null)return "Unrated";if(p.rating>=87)return "Legendary";if(p.rating>=84)return "Epic";if(p.rating>=82)return "Rare";if(p.rating>=79)return "Uncommon";return "Common"}
+const rarityColors={Legendary:"#fbbf24",Epic:"#c084fc",Rare:"#60a5fa",Uncommon:"#4ade80",Common:"#aab5d0",Unrated:"#aab5d0"};
+function ownedPlayers(){try{return JSON.parse(localStorage.getItem("rr-players")||"[]")}catch(e){return []}}
+function showPage(id){["home","topics","quiz","results","shop","album"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function renderAlbum(){const owned=ownedPlayers();$("albumCount").textContent=owned.length+" of "+PLAYERS.length+" collected";$("playerAlbum").innerHTML=PLAYERS.map((p,i)=>{const count=owned.filter(x=>x===i).length;const r=rarity(p);return '<div class="subject" style="cursor:default;opacity:'+(count?1:.48)+';border-color:'+(count?rarityColors[r]:"#3a496a")+'"><span class="emoji">'+(count?"🏅":"🔒")+'</span><strong>'+(count?p.name:"???")+'</strong><small>'+(count?(p.rating===null?"Rating not set":"Rating "+p.rating)+" · "+r+(count>1?" · x"+count:""):"Not collected")+'</small></div>'}).join("")}
+function openPack(){if(coins<100){$("packResult").className="feedback bad";$("packResult").textContent="You need 100 coins to open a pack. Earn coins by answering revision questions.";return}coins-=100;updateCoins();const n=Math.floor(Math.random()*PLAYERS.length),p=PLAYERS[n],r=rarity(p);const owned=ownedPlayers();owned.push(n);localStorage.setItem("rr-players",JSON.stringify(owned));$("packResult").className="feedback good";$("packResult").innerHTML="<strong>🎉 You got "+p.name+"!</strong><br>"+(p.rating===null?"Rating not provided": "Rating: "+p.rating)+"<br>Rarity: <strong style='color:"+rarityColors[r]+"'>"+r+"</strong><br><span>Added to your album.</span>";}
+
 const icons={"Maths":"📐","Biology":"🧬","Chemistry":"⚗️","Physics":"⚡","English":"📚","History":"🏛️","Geography":"🌍"};
 let coins=Number(localStorage.getItem("rr-coins")||0), currentSubject="", questions=[], index=0, score=0, earned=0, answered=false;
 const $=id=>document.getElementById(id);
@@ -205,6 +222,7 @@ function chooseAnswer(choice){if(answered)return;answered=true;const q=questions
 function finish(){show("results");$("progressFill").style.width="100%";$("finalScore").textContent=score+"/"+questions.length;$("earnedCoins").textContent=earned;$("totalCoins").textContent=coins;$("resultEmoji").textContent=score===questions.length?"🏆":score>=Math.ceil(questions.length*.6)?"✨":"💪";$("resultTitle").textContent=score===questions.length?"Perfect score!":score>=Math.ceil(questions.length*.6)?"Great effort!":"Keep building your streak!";$("resultText").textContent="You finished "+currentSubject+". You got "+score+" out of "+questions.length+" correct and earned "+earned+" coins. Every question is progress."}
 $("nextBtn").addEventListener("click",()=>{if(!answered)return;if(index<questions.length-1){index++;renderQuestion()}else finish()});
 $("backHome").addEventListener("click",()=>show("home"));$("backSubjects").addEventListener("click",()=>show("home"));$("againBtn").addEventListener("click",()=>show("home"));
+$("shopNav").addEventListener("click",()=>showPage("shop"));$("albumNav").addEventListener("click",()=>{renderAlbum();showPage("album")});$("shopHome").addEventListener("click",()=>showPage("home"));$("albumHome").addEventListener("click",()=>showPage("home"));$("openPack").addEventListener("click",openPack);
 updateCoins();initSubjects();
 </script>
 </body>
